@@ -22,11 +22,11 @@ export const metadata = {
     title: "EchoChamber - Connect & Share in a Safer Space",
     description:
       "EchoChamber is a social media platform focused on non-political, respectful discussions.",
-    url: "https://yourdomain.com",
+    url: "https://echo-chamber-next.vercel.app/",
     siteName: "EchoChamber",
     images: [
       {
-        url: "https://yourdomain.com/og-image.png",
+        url: "https://echo-chamber-next.vercel.app/img/Main-logo.png",
         width: 1200,
         height: 630,
         alt: "EchoChamber OG Image",
@@ -40,8 +40,8 @@ export const metadata = {
     title: "EchoChamber - Connect & Share in a Safer Space",
     description:
       "EchoChamber is a social media platform focused on non-political, respectful discussions.",
-    creator: "@yourTwitterHandle",
-    images: ["https://yourdomain.com/twitter-image.png"],
+    creator: "@someone",
+    images: ["https://echo-chamber-next.vercel.app/img/Main-logo.png"],
   },
 };
 
