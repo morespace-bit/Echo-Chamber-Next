@@ -100,7 +100,7 @@ export default function Support() {
                 ) : (
                   ""
                 )}
-                <ReackMarkdown children={response} />
+                <ReackMarkdown>{response}</ReackMarkdown>
               </div>
             )}
           </div>
