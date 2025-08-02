@@ -28,7 +28,10 @@ export default function Signup() {
     mutationFn: register,
     onSuccess: (data) => {
       console.log(data);
-      localStorage.setItem("token", data.token);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", data.token);
+      }
+
       setErrorMsg("Login was successfull");
       // setErrorMsg(data.message);
     },

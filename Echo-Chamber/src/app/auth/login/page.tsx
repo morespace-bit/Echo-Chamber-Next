@@ -30,7 +30,10 @@ export default function Login() {
     mutationKey: ["login"],
     mutationFn: login,
     onSuccess: (data) => {
-      localStorage.setItem("token", data.token);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", data.token);
+      }
+
       setErrorMsg("Login was successfull");
       setTimeout(() => {
         setErrorMsg("");
