@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { API_WITH_TOKEN } from "../http/api";
+import { getAPIWithToken } from "../http/api";
 
 export function useVerify() {
   // the function which does the api call
+  const api = getAPIWithToken();
   async function verify() {
-    const res = await API_WITH_TOKEN.get("/api/verify");
+    const res = await api.get("/api/verify");
     return res.data;
   }
 
