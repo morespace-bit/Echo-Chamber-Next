@@ -1,42 +1,50 @@
+"use client";
+
 import Link from "next/link";
 import { useState } from "react";
-
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import { API } from "@/lib/http/api";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 export default function Signup() {
-  const [user, setUser] = useState({});
-  const [successMsg, setSuccessMsg] = useState("");
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
+
   const [errorMsg, setErrorMsg] = useState("");
-  const [loding, setloding] = useState(false);
+
   const router = useRouter();
   // function to sign up
-  async function signUp() {
-    setloding(true);
-    const res = await fetch(`${BACKENDURL}/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+  async function register() {
+    const res = await API.post("/api/register", user);
 
-      body: JSON.stringify(user),
-    });
-    const msg = await res.json();
-    setUser({
-      email: "",
-      password: "",
-    });
+    return res.data;
+  }
 
-    if (res.ok) {
-      const token = msg.token;
-      localStorage.setItem("token", token);
-      navigate("/profilesetup", { replace: true });
-    } else {
-      setErrorMsg(msg.message);
-      setTimeout(() => {
-        setErrorMsg("");
-      }, 4000);
-    }
-    setloding(false);
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["register"],
+    mutationFn: register,
+    onSuccess: (data) => {
+      console.log(data);
+      localStorage.setItem("token", data.token);
+      setErrorMsg("Login was successfull");
+      // setErrorMsg(data.message);
+    },
+    onError: (error: AxiosError<{ message: string }>) => {
+      setErrorMsg(
+        error.response?.data.message ?? "Some error occured try again"
+      );
+      setUser((pre) => ({
+        email: "",
+        password: "",
+      }));
+    },
+  });
+
+  function signUp() {
+    mutate();
   }
 
   return (
@@ -106,14 +114,14 @@ export default function Signup() {
                   type="submit"
                   className="px-4 cursor-pointer py-5 w-full md:w-50 border border-gray-500 rounded-xs  bg-sky-700 text-white  hover:shadow-2xl shadow-blue-800/50"
                 >
-                  {loding ? "Processing" : "Next"}
+                  {isPending ? "Processing" : "Next"}
                 </button>
               </div>
             </form>
 
             <div className="mx-6 border-b-2 border-gray-300"></div>
 
-            <Link to="/login" replace={true}>
+            <Link href="/auth/login" replace={true}>
               <div className="flex justify-center items-center">
                 <button className="bg-sky-700 rounded p-4 hover:bg-blue-800 duration-75 ease-in capitalize cursor-pointer text-white">
                   already signed in
@@ -128,12 +136,6 @@ export default function Signup() {
       </div>
 
       {/* success message container  */}
-
-      {successMsg && (
-        <div className="absolute top-15 right-5 bg-green-300 py-2 px-4 rounded-xl md:right-15">
-          <p className="font-semibold ">User already exists</p>
-        </div>
-      )}
 
       {/* error message container */}
       {errorMsg && (

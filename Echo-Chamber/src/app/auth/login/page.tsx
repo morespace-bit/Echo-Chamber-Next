@@ -27,6 +27,7 @@ export default function Login() {
   }
 
   const { mutate, isError, isPending, isSuccess } = useMutation({
+    mutationKey: ["login"],
     mutationFn: login,
     onSuccess: (data) => {
       localStorage.setItem("token", data.token);
@@ -129,7 +130,7 @@ export default function Login() {
 
             {/* if not signed in yet */}
             <div className="flex justify-center items-center">
-              <Link href="/signup" replace={true}>
+              <Link href="/auth/register" replace={true}>
                 <button className="bg-sky-700 rounded p-4 hover:bg-blue-800 duration-75 ease-in capitalize text-white cursor-pointer">
                   not signed in yet
                 </button>
