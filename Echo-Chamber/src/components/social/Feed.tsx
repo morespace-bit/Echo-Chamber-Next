@@ -9,9 +9,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getAPIWithToken } from "@/lib/http/api";
 import { IPost } from "@/lib/types/types";
 import Link from "next/link";
+import CreateFeedModal from "./Modals/CreateFeedModal";
 
-// import CreateFeed from "./Creating/CreateFeed";
-// import CreateFeedText from "./Creating/CreateFeedText";
 export default function Feed() {
   const [imageUpload, setImageUpload] = useState(false);
   const [textUpload, setTextUpload] = useState(false);
@@ -387,13 +386,9 @@ export default function Feed() {
           />
         )} */}
       </div>
-      {/* {imageUpload == true && (
-        <CreateFeed
-          userData={userData}
-          setImageUpload={setImageUpload}
-          getPost={getPost}
-        />
-      )} */}
+      {imageUpload == true && (
+        <CreateFeedModal setImageUpload={setImageUpload} />
+      )}
     </>
   );
 }
