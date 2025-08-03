@@ -34,10 +34,7 @@ export default function Login() {
         localStorage.setItem("token", data.token);
       }
 
-      setErrorMsg("Login was successfull");
-      setTimeout(() => {
-        setErrorMsg("");
-      }, 3000);
+      router.replace("/social");
     },
 
     onError: (error: AxiosError<{ message: string }>) => {

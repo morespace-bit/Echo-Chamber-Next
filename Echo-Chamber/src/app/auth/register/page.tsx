@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { API } from "@/lib/http/api";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-
 export default function Signup() {
   const [user, setUser] = useState({
     email: "",
@@ -31,8 +30,8 @@ export default function Signup() {
       if (typeof window !== "undefined") {
         localStorage.setItem("token", data.token);
       }
+      router.replace("register/userdata");
 
-      setErrorMsg("Login was successfull");
       // setErrorMsg(data.message);
     },
     onError: (error: AxiosError<{ message: string }>) => {
