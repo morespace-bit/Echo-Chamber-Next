@@ -1,4 +1,5 @@
 import SocialNavBar from "@/components/social/SocialNavBar";
+import { UserProvider } from "@/lib/context/UserContext";
 
 export default function SocialLayout({
   children,
@@ -8,7 +9,11 @@ export default function SocialLayout({
   return (
     <>
       <main>
-        <SocialNavBar />
+        <UserProvider>
+          <SocialNavBar />
+        </UserProvider>
+
+        {children}
       </main>
     </>
   );

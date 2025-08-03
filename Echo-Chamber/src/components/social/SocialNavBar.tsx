@@ -9,13 +9,14 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import useUser from "@/lib/hooks/useUser";
 import { useVerify } from "@/lib/hooks/useVerify";
+import { useUserContext } from "@/lib/context/UserContext";
 
 export default function SocialNavBar() {
   const [isOpen, setOpen] = useState(false);
   const [u_id, setUId] = useState("");
   const [noti, setNoti] = useState(false);
   const [mode, setMode] = useState("light");
-  const { userData } = useUser();
+  const { userData, error } = useUserContext();
   const { isError, isLoading, isSuccess, isFetching } = useVerify();
 
   const router = useRouter();
