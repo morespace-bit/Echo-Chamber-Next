@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://echo-chamber-next.vercel.app/sitemap.xml
