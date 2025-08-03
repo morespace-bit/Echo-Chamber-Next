@@ -1,7 +1,11 @@
+import Feed from "@/components/social/Feed";
+
 export default function SocialPage() {
   return (
     <>
-      <div></div>
+      <div>
+        <Feed />
+      </div>
     </>
   );
 }

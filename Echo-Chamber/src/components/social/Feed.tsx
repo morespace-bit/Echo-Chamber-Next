@@ -1,107 +1,53 @@
+"use client";
+
 import { useState, useEffect, useRef } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import CreateFeed from "./Creating/CreateFeed";
-import CreateFeedText from "./Creating/CreateFeedText";
+import { useUserContext } from "@/lib/context/UserContext";
+
+import { useQuery } from "@tanstack/react-query";
+import { getAPIWithToken } from "@/lib/http/api";
+import { IPost } from "@/lib/types/types";
+import Link from "next/link";
+
+// import CreateFeed from "./Creating/CreateFeed";
+// import CreateFeedText from "./Creating/CreateFeedText";
 export default function Feed() {
-  const [userData, setUserData] = useState(null);
   const [imageUpload, setImageUpload] = useState(false);
   const [textUpload, setTextUpload] = useState(false);
-  const [post, setPost] = useState(null);
   const [loadmore, setLoadmore] = useState(false);
-  const [postLikes, setPostLikes] = useState({});
-  const [postReport, setPostReport] = useState({});
+  const [postLikes, setPostLikes] = useState<IToogle>({});
+  const [postReport, setPostReport] = useState<IToogle>({});
   const [msgContent, setMsgContent] = useState<string | null>(null);
   const [msg, setMsg] = useState(false);
   const [viewProfile, setViewProfile] = useState(false);
 
+  const { userData } = useUserContext();
+
   // this is done to make the day js library work
   dayjs.extend(relativeTime);
-
-  // function to get the user data such as username and profile pic and id
-  async function getData() {
-    const token = localStorage.getItem("token");
-
-    const res = await fetch(`${BACKENDURL}/getProfile`, {
-      method: "GET",
-      headers: {
-        Authorization: token,
-      },
-    });
-    const msg = await res.json();
-    if (res.ok) {
-      console.log("Data fetched successfully");
-      setUserData(msg.data);
-    } else {
-      console.log("Error in data fetching");
-    }
-  }
 
   // function to get the post data
 
   async function getPost() {
-    const res = await fetch(`${BACKENDURL}/getAllPost`, {
-      method: "GET",
-    });
-    const msg = await res.json();
-    if (res.ok) {
-      console.log("Data fetched succesfully of post post ");
-      setPost(msg.data);
+    const api = getAPIWithToken();
 
-      console.log(msg.data);
-    } else {
-      console.log("Error in data fetching");
-    }
+    const res = await api.get("/api/getAllPost");
+    return res.data;
   }
 
-  // function for liking and unliking the post
-
-  async function likeUnlikePost(id) {
-    if (postLikes[id]) {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`${BACKENDURL}/unlike/${id}`, {
-        method: "POST",
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      const msg = await res.json();
-      if (res.ok) {
-        console.log(msg.updatedLike);
-        getPost();
-        // setPost((pre) => {
-        //   return {
-        //     ...pre,
-        //     likes: msg.likes,
-        //   };
-        // });
-      }
-    } else {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`${BACKENDURL}/like/${id}`, {
-        method: "POST",
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      const msg = await res.json();
-      if (res.ok) {
-        getPost();
-        // setPost((pre) => {
-        //   return {
-        //     ...pre,
-        //     likes: msg.likes,
-        //   };
-        // });
-      }
-    }
-  }
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ["getPost"],
+    queryFn: getPost,
+  });
 
   // handle ui change of the like and unlike function
 
-  function likeUi(id) {
+  interface IToogle {
+    [key: number]: boolean;
+  }
+
+  function likeUi(id: number) {
     setPostLikes((pre) => {
       return {
         ...pre,
@@ -110,59 +56,52 @@ export default function Feed() {
     });
   }
 
-  // function to call the backend endpoint to do the reporting part
-
-  // trying a arrow function not that i could not do it's just i did not do
-  const reportPost = async (id) => {
-    const token = localStorage.getItem("token");
-
-    if (!postReport[id]) {
-      setMsg(true);
-      setMsgContent(
-        "You are seriously awesome thanks for reporting. People like you make this social media a better place."
-      );
-      setTimeout(() => {
-        setMsg("");
-        setMsg(false);
-      }, 4500);
-      const res = await fetch(`${BACKENDURL}/addReport/${id}`, {
-        method: "POST",
-        headers: {
-          Authorization: token,
-        },
-      });
-      const msg = await res.json();
-
-      if (res.ok) {
-        console.log(msg.message + " " + msg.reports);
+  // Like / Unlike Post
+  async function likeUnlikePost(id: number) {
+    const api = getAPIWithToken();
+    try {
+      if (postLikes[id]) {
+        const res = await api.post(`/api/unlike/${id}`);
+        console.log(res.data.updatedLike);
+      } else {
+        const res = await api.post(`/api/like/${id}`);
+        console.log(res.data.updatedLike);
       }
-    } else {
-      const res = await fetch(`${BACKENDURL}/removeReport/${id}`, {
-        method: "POST",
-        headers: {
-          Authorization: token,
-        },
-      });
-      const msg = await res.json();
+      await refetch(); // refresh post data
+    } catch (err) {
+      console.error("Error in like/unlike:", err);
+    }
+  }
 
-      if (res.ok) {
-        console.log(msg.message + " " + msg.reports);
+  // Report / Unreport Post
+  const reportPost = async (id: number) => {
+    const api = getAPIWithToken();
+    try {
+      if (!postReport[id]) {
+        setMsg(true);
+        setMsgContent(
+          "You are seriously awesome thanks for reporting. People like you make this social media a better place."
+        );
+        setTimeout(() => setMsg(false), 4500);
+
+        const res = await api.post(`/api/addReport/${id}`);
+        console.log(res.data.message, res.data.reports);
+      } else {
+        const res = await api.post(`/api/removeReport/${id}`);
+        console.log(res.data.message, res.data.reports);
       }
+    } catch (err) {
+      console.error("Error reporting post:", err);
     }
   };
 
   // function to handle ui change of teh report function
 
-  function reportUi(id) {
+  function reportUi(id: number) {
     setPostReport((pre) => ({ ...pre, [id]: !pre[id] }));
   }
 
-  useEffect(() => {
-    getData();
-    getPost();
-  }, []);
-
-  if (!post) {
+  if (isLoading) {
     return (
       <>
         <div
@@ -171,7 +110,7 @@ export default function Feed() {
         >
           <svg
             aria-hidden="true"
-            class="w-10 h-10 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            className="w-10 h-10 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -185,7 +124,7 @@ export default function Feed() {
               fill="currentFill"
             />
           </svg>
-          <span class="sr-only">Loading...</span>
+          <span className="sr-only">Loading...</span>
         </div>
       </>
     );
@@ -291,8 +230,8 @@ export default function Feed() {
           </div>
 
           {/* the actual post starts from here */}
-          {post?.length != 0 ? (
-            post?.map((i) => (
+          {data.data?.length != 0 ? (
+            data.data?.map((i: IPost) => (
               <div
                 key={i?.id}
                 className="flex p-6 bg-white dark:bg-gray-700 mb-5 rounded-xl shadow-xl max-h-200 max-w-150 min-w-100 flex-col relative md:min-w-150"
@@ -302,7 +241,7 @@ export default function Feed() {
               >
                 {/* the heading part of the post  */}
 
-                <Link to={`/SocialPage/profile/${i?.author.id}`}>
+                <Link href={`/SocialPage/profile/${i?.author.id}`}>
                   <div
                     className="mb-4 flex items-center gap-4 group w-40"
                     onMouseLeave={() => {
@@ -440,21 +379,21 @@ export default function Feed() {
           {/* )} */}
         </div>
 
-        {textUpload && (
+        {/* {textUpload && (
           <CreateFeedText
             userData={userData}
             setTextUpload={setTextUpload}
             getPost={getPost}
           />
-        )}
+        )} */}
       </div>
-      {imageUpload == true && (
+      {/* {imageUpload == true && (
         <CreateFeed
           userData={userData}
           setImageUpload={setImageUpload}
           getPost={getPost}
         />
-      )}
+      )} */}
     </>
   );
 }

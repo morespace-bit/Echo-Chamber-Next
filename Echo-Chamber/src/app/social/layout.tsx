@@ -11,9 +11,9 @@ export default function SocialLayout({
       <main>
         <UserProvider>
           <SocialNavBar />
-        </UserProvider>
 
-        {children}
+          {children}
+        </UserProvider>
       </main>
     </>
   );

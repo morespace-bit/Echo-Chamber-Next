@@ -13,6 +13,7 @@
     "@google/genai": "^1.12.0",
     "@tanstack/react-query": "^5.84.1",
     "axios": "^1.11.0",
+    "dayjs": "^1.11.13",
     "lucide-react": "^0.536.0",
     "next": "15.4.5",
     "next-sitemap": "^4.2.3",
