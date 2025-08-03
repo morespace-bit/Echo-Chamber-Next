@@ -7,16 +7,22 @@ import { useVerify } from "@/lib/hooks/useVerify";
 import Image from "next/image";
 export default function LandingNavbar() {
   const router = useRouter();
-  const isVerified = useVerify();
+  const { isError, isLoading, isSuccess, isFetching } = useVerify();
   const [isOpen, setIsOpen] = useState(false);
 
   // redirect once the verification is changed
 
   useEffect(() => {
-    if (isVerified) {
+    console.log(
+      `isloading ${isLoading} isError ${isError} isSuccess ${isSuccess}`
+    );
+    if (isFetching) {
+      return;
+    }
+    if (isSuccess) {
       router.push("/social");
     }
-  }, [isVerified, router]);
+  }, [isError, isLoading, isSuccess, router]);
 
   return (
     <>

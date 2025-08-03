@@ -1,3 +1,5 @@
+import SocialNavBar from "@/components/social/SocialNavBar";
+
 export default function SocialLayout({
   children,
 }: {
@@ -5,7 +7,9 @@ export default function SocialLayout({
 }) {
   return (
     <>
-      <main>{children}</main>
+      <main>
+        <SocialNavBar />
+      </main>
     </>
   );
 }

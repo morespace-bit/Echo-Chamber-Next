@@ -15,10 +15,8 @@ export default function SocialNavBar() {
   const [u_id, setUId] = useState("");
   const [noti, setNoti] = useState(false);
   const [mode, setMode] = useState("light");
-  const { userData, isLoading, error } = useUser();
-  console.log(userData);
-
-  const verify = useVerify();
+  const { userData } = useUser();
+  const { isError, isLoading, isSuccess, isFetching } = useVerify();
 
   const router = useRouter();
 
@@ -44,14 +42,13 @@ export default function SocialNavBar() {
   }, []);
 
   useEffect(() => {
-    console.log(verify);
-    if (verify == null) {
+    if (isFetching) {
       return;
     }
-    if (!verify) {
+    if (isError) {
       router.push("/");
     }
-  }, [verify]);
+  }, [isError, isLoading, isSuccess, isFetching]);
 
   async function signout() {
     if (typeof window != "undefined") {
