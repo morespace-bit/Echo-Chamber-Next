@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useVerify } from "@/lib/hooks/useVerify";
 import Image from "next/image";
+
 export default function LandingNavbar() {
   const router = useRouter();
   const { isError, isLoading, isSuccess, isFetching } = useVerify();
@@ -29,34 +30,34 @@ export default function LandingNavbar() {
       {/* main container */}
       <div className="flex items-center justify-between p-3 bg-blue-800 md:px-10 cursor-pointer shadow-2xl shadow-blue-800 sticky top-0 z-10">
         {/* for logo */}
-        <a href="/">
+        <Link href="/">
           <div className="flex gap-2 items-center">
             <Image src="/img/Main-logo.png" alt="" width={50} height={50} />
             <p className="text-2xl md:text-3xl text-white font-semibold font-mono">
               Echo-Chamber.
             </p>
           </div>
-        </a>
+        </Link>
         {/* the hamburger sing and login button and other stuff*/}
         <div className="flex flex-row md:gap-10 gap-3 justify-center items-center">
           {/* the nav elements for md dispaly */}
           <div className="md:block hidden">
             <div className="flex justify-around gap-4 ">
-              <a href="/">
+              <Link href="/">
                 <p className="font-semibold p-2 text-left px-5 hover:bg-cyan-800 duration-200 ease-in-out cursor-pointer text-white rounded-xl hover:shadow-2xl shadow-cyan-200">
                   Home
                 </p>
-              </a>
-              <a href="#community">
+              </Link>
+              <Link href="#community">
                 <p className="font-semibold  border-white p-2 text-left  px-5 hover:bg-cyan-800 duration-200 ease-in-out cursor-pointer text-white rounded-xl hover:shadow-2xl shadow-cyan-200">
                   Comunity
                 </p>
-              </a>
-              <a href="#about">
+              </Link>
+              <Link href="#about">
                 <p className="font-semibold  border-white  p-2 text-left  px-5 hover:bg-cyan-800 duration-200 ease-in-out cursor-pointer text-white rounded-xl hover:shadow-2xl shadow-cyan-200">
                   About us
                 </p>
-              </a>
+              </Link>
               <Link href="/support">
                 <p className="font-semibold  border-white  p-2 text-left  px-5 hover:bg-cyan-800 duration-200 ease-in-out cursor-pointer text-white rounded-xl hover:shadow-2xl shadow-cyan-200">
                   Help
@@ -64,7 +65,7 @@ export default function LandingNavbar() {
               </Link>
             </div>
           </div>
-          <Link href="/auth/login">
+          <Link href="/Linkuth/login">
             <button className="bg-white py-2 px-5 cursor-pointer hover:bg-sky-400 hover:text-white rounded-xs duration-100 ease-initial font-semibold hover:shadow-2xl shadow-cyan-200">
               Login
             </button>
