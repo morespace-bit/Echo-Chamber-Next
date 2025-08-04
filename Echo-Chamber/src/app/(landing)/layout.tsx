@@ -8,9 +8,11 @@ export default function LandingLayout({
 }) {
   return (
     <>
-      <LandingNavbar />
-      <main>{children}</main>
-      <LandingFooter />
+      <main>
+        <LandingNavbar />
+        {children}
+        <LandingFooter />
+      </main>
     </>
   );
 }

@@ -5,18 +5,22 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useVerify } from "@/lib/hooks/useVerify";
 import Image from "next/image";
+
 export default function LandingNavbar() {
   const router = useRouter();
-  const isVerified = useVerify();
+  const { isError, isLoading, isSuccess, isFetching } = useVerify();
   const [isOpen, setIsOpen] = useState(false);
 
   // redirect once the verification is changed
 
   useEffect(() => {
-    if (isVerified) {
-      router.push("/");
+    if (isFetching) {
+      return;
     }
-  }, [isVerified, router]);
+    if (isSuccess) {
+      router.push("/social");
+    }
+  }, [isError, isLoading, isSuccess, router]);
 
   return (
     <>
@@ -25,12 +29,7 @@ export default function LandingNavbar() {
         {/* for logo */}
         <Link href="/">
           <div className="flex gap-2 items-center">
-            <Image
-              src={"/img/Main-logo.png"}
-              alt="logo"
-              width={40}
-              height={40}
-            />
+            <Image src="/img/Main-logo.png" alt="" width={50} height={50} />
             <p className="text-2xl md:text-3xl text-white font-semibold font-mono">
               Echo-Chamber.
             </p>
@@ -41,7 +40,7 @@ export default function LandingNavbar() {
           {/* the nav elements for md dispaly */}
           <div className="md:block hidden">
             <div className="flex justify-around gap-4 ">
-              <Link href="#home">
+              <Link href="/">
                 <p className="font-semibold p-2 text-left px-5 hover:bg-cyan-800 duration-200 ease-in-out cursor-pointer text-white rounded-xl hover:shadow-2xl shadow-cyan-200">
                   Home
                 </p>
@@ -63,7 +62,7 @@ export default function LandingNavbar() {
               </Link>
             </div>
           </div>
-          <Link href="auth/login">
+          <Link href="/auth/login">
             <button className="bg-white py-2 px-5 cursor-pointer hover:bg-sky-400 hover:text-white rounded-xs duration-100 ease-initial font-semibold hover:shadow-2xl shadow-cyan-200">
               Login
             </button>

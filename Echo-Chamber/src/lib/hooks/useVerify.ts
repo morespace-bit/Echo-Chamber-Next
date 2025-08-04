@@ -9,12 +9,16 @@ export function useVerify() {
     return res.data;
   }
 
-  const { data, isSuccess, isLoading, isError } = useQuery({
+  const { data, isSuccess, isLoading, isError, isFetching } = useQuery({
     queryKey: ["verify"],
     queryFn: verify,
+    retry: false,
   });
 
-  if (isLoading) return null;
-  if (isError) return false;
-  if (isSuccess) return true;
+  return {
+    isLoading,
+    isError,
+    isSuccess,
+    isFetching,
+  };
 }

@@ -2,6 +2,14 @@
 // resuable accros app
 
 import axios from "axios";
+
+export const API = axios.create({
+  baseURL: "http://localhost:4000",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 // function to get tokenized instance dynamically
 export function getAPIWithToken() {
   if (typeof window !== "undefined") {
@@ -18,10 +26,3 @@ export function getAPIWithToken() {
   // fallback for SSR: no token
   return API;
 }
-
-export const API = axios.create({
-  baseURL: "http://localhost:4000",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});

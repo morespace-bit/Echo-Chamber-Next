@@ -48,11 +48,13 @@ export const metadata = {
 export default function Homepage() {
   return (
     <>
-      <HeroPart />
-      <div className="md:px-30">
-        <EchoChamber />
-        <Who />
-        <WhyJoin />
+      <div>
+        <HeroPart />
+        <div className="md:px-30">
+          <EchoChamber />
+          <Who />
+          <WhyJoin />
+        </div>
       </div>
     </>
   );
