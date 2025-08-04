@@ -14,9 +14,6 @@ export default function LandingNavbar() {
   // redirect once the verification is changed
 
   useEffect(() => {
-    console.log(
-      `isloading ${isLoading} isError ${isError} isSuccess ${isSuccess}`
-    );
     if (isFetching) {
       return;
     }
@@ -65,7 +62,7 @@ export default function LandingNavbar() {
               </Link>
             </div>
           </div>
-          <Link href="/Linkuth/login">
+          <Link href="/auth/login">
             <button className="bg-white py-2 px-5 cursor-pointer hover:bg-sky-400 hover:text-white rounded-xs duration-100 ease-initial font-semibold hover:shadow-2xl shadow-cyan-200">
               Login
             </button>
