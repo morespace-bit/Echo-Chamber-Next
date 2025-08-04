@@ -10,10 +10,10 @@ import Link from "next/link";
 import useUser from "@/lib/hooks/useUser";
 import { useVerify } from "@/lib/hooks/useVerify";
 import { useUserContext } from "@/lib/context/UserContext";
+import Noti from "./Modals/Noti";
 
 export default function SocialNavBar() {
   const [isOpen, setOpen] = useState(false);
-  const [u_id, setUId] = useState("");
   const [noti, setNoti] = useState(false);
   const [mode, setMode] = useState("light");
   const { userData, error } = useUserContext();
@@ -64,7 +64,7 @@ export default function SocialNavBar() {
       <div className="bg-white w-full flex px-4 py-6 justify-between items-center md:px-10 sticky top-0 overflow-x-hidden shadow-2xs z-10 dark:bg-gray-700 dark:text-white">
         {/* logo */}
         <div>
-          <Link href="feed">
+          <Link href="/social">
             <h1 className="font-black text-xl md:text-3xl text-black dark:text-white font-serif cursor-pointer">
               Echo-Chamber.
             </h1>
@@ -111,7 +111,7 @@ export default function SocialNavBar() {
       </div>
 
       {/* The notification dropdown */}
-      {/* {noti && <Noti />} */}
+      {noti && <Noti />}
       {/* profile dropdown box */}
       {noti == false && (
         <div className="bg-white dark:bg-gray-600 dark:text-white w-60 fixed right-6 h-80 top-25 shadow-2xl rounded-xl flex p-6 hidden md:block z-10">
@@ -138,7 +138,7 @@ export default function SocialNavBar() {
           </div>
 
           {/* profile button */}
-          <Link href={`/SocialPage/profile/${u_id}`}>
+          <Link href={`/social/profile/${userData?.id}`}>
             <button className="mt-2 bg-blue-200 dark:bg-blue-800 text-black dark:text-white p-2 rounded w-full cursor-pointer hover:bg-blue-700 dark:hover:bg-blue-600 transition">
               View profile
             </button>
@@ -228,7 +228,7 @@ export default function SocialNavBar() {
           </div>
 
           {/* profile button */}
-          <Link href={`/SocialPage/profile/${u_id}`} className="w-full">
+          <Link href={`/social/profile/${userData?.id}`} className="w-full">
             <button
               onClick={() => {
                 setOpen((pre) => !pre);
