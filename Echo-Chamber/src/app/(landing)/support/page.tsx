@@ -8,6 +8,7 @@ import faqs from "@/lib/global/faqs";
 import ReackMarkdown from "react-markdown";
 
 import { GoogleGenAI } from "@google/genai";
+import SEOHead from "@/components/SEOHead";
 
 interface IToogleState {
   [key: number]: boolean;
@@ -54,6 +55,7 @@ export default function Support() {
 
   return (
     <>
+      <SEOHead />
       {/* body section */}
 
       <div className="min-h-screen flex bg-rose-50 ">
@@ -85,7 +87,7 @@ export default function Support() {
 
             {/* AI Response */}
             {response && (
-              <div className="bg-rose-200 p-5 rounded-lg shadow-inner mt-5 text-left">
+              <div className="bg-rose-200 p-5 rounded-lg shadow-inner mt-5 text-left prose">
                 {loding ? (
                   <>
                     <p>Your question is being processed plese wait.</p>

@@ -1,3 +1,4 @@
+import SEOHead from "@/components/SEOHead";
 import SocialNavBar from "@/components/social/SocialNavBar";
 import { UserProvider } from "@/lib/context/UserContext";
 
@@ -8,6 +9,9 @@ export default function SocialLayout({
 }) {
   return (
     <>
+      <head>
+        <SEOHead />
+      </head>
       <main>
         <UserProvider>
           <SocialNavBar />
